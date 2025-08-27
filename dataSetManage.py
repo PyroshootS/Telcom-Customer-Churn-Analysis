@@ -1,9 +1,8 @@
 """
-MÓDULO DE GESTIÓN DE DATOS
+MÓDULO DE GESTIÓN DE DATOS - Versión Simplificada
 - Carga de datos
-- Limpieza básica
-- Exploración inicial
-- Búsquedas y filtros
+- Exploración básica
+- Visualización simple
 """
 
 import pandas as pd
@@ -47,17 +46,17 @@ def showDatasetInfo(df):
     print("\n📋 TIPOS DE DATOS:")
     print(df.dtypes.value_counts())
 
-def searchByColumn(df):
-    """Busca por columna y valores específicos"""
+def showColumnSamples(df):
+    """Muestra 20 ejemplos aleatorios de una columna específica con customerID"""
     print("\n" + "="*60)
-    print("🔍 BUSCAR POR COLUMNA")
+    print("🔍 MOSTRAR MUESTRAS DE COLUMNA")
     print("="*60)
     
     # Columnas disponibles (excluyendo customerID)
     columnasDisponibles = [col for col in df.columns if col != 'customerID']
     
     # Mostrar columnas disponibles
-    print("Columnas disponibles para filtrar:")
+    print("Columnas disponibles:")
     for i, col in enumerate(columnasDisponibles, 1):
         print(f"{i:2d}. {col}")
     
@@ -66,72 +65,20 @@ def searchByColumn(df):
         if 1 <= opcion <= len(columnasDisponibles):
             columnaSeleccionada = columnasDisponibles[opcion-1]
             
-            # Mostrar valores únicos de la columna
-            valoresUnicos = df[columnaSeleccionada].unique()
+            # Mostrar información de la columna
             print(f"\n🎯 Columna seleccionada: {columnaSeleccionada}")
-            print(f"📊 Valores únicos: {valoresUnicos}")
-            print(f"🔢 Número de valores únicos: {len(valoresUnicos)}")
+            print(f"📊 Tipo de dato: {df[columnaSeleccionada].dtype}")
+            print(f"🔢 Valores únicos: {df[columnaSeleccionada].nunique()}")
             
-            # Preguntar valor para filtrar
-            valorFiltro = input("\nValor a filtrar (dejar vacío para ver todos): ").strip()
-            
-            if valorFiltro:
-                # Convertir a número si la columna es numérica
-                if df[columnaSeleccionada].dtype in ['int64', 'float64']:
-                    try:
-                        valorFiltro = float(valorFiltro) if '.' in valorFiltro else int(valorFiltro)
-                    except:
-                        pass
-                
-                # Filtrar
-                resultado = df[df[columnaSeleccionada] == valorFiltro]
-                print(f"\n✅ Resultados encontrados: {len(resultado)}")
-                
-                if not resultado.empty:
-                    # Mostrar solo columnas importantes
-                    columnasMostrar = ['customerID', columnaSeleccionada]
-                    # Agregar algunas columnas adicionales útiles
-                    columnasUtiles = ['Churn', 'tenure', 'MonthlyCharges', 'TotalCharges']
-                    for col in columnasUtiles:
-                        if col in df.columns and col != columnaSeleccionada:
-                            columnasMostrar.append(col)
-                    
-                    print(resultado[columnasMostrar].head(20))
-                else:
-                    print("❌ No se encontraron resultados con ese filtro")
-            else:
-                # Mostrar muestras aleatorias
-                print(f"\n📋 Mostrando 10 muestras aleatorias:")
-                muestras = df[['customerID', columnaSeleccionada]].sample(n=10, random_state=42)
-                print(muestras)
+            # Mostrar 20 ejemplos aleatorios con customerID
+            print(f"\n📋 20 ejemplos aleatorios:")
+            muestras = df[['customerID', columnaSeleccionada]].sample(n=20, random_state=42)
+            print(muestras.to_string(index=False))
                 
         else:
             print("❌ Opción inválida")
     except ValueError:
         print("❌ Por favor ingresa un número válido")
-
-def searchByCustomerId(df):
-    """Busca información por customerID específico"""
-    print("\n" + "="*60)
-    print("👤 BUSCAR POR CUSTOMER ID")
-    print("="*60)
-    
-    customerId = input("Ingresa el customerID: ").strip()
-    
-    if customerId in df['customerID'].values:
-        resultado = df[df['customerID'] == customerId]
-        print(f"\n✅ CustomerID encontrado!")
-        print("="*40)
-        
-        # Mostrar toda la información en formato vertical
-        for columna in df.columns:
-            valor = resultado[columna].values[0]
-            print(f"{columna:25}: {valor}")
-        
-    else:
-        print("❌ CustomerID no encontrado")
-        print("Algunos customerIDs de ejemplo:")
-        print(df['customerID'].head(5).tolist())
 
 def showChurnStats(df):
     """Muestra estadísticas del Churn"""
@@ -148,16 +95,8 @@ def showChurnStats(df):
         print(f"Clientes que SÍ se fueron: {churnCounts[1]:,} ({churnPercent[1]:.1f}%)")
         print(f"Total clientes: {len(df):,}")
         
+        # Información adicional útil
+        print(f"\n📊 Tasa de churn general: {churnPercent[1]:.1f}%")
+        
     else:
         print("❌ Columna 'Churn' no encontrada")
-
-def showUniqueValues(df, columnName):
-    """Muestra valores únicos y su distribución para una columna"""
-    if columnName in df.columns:
-        print(f"\n🎯 Valores únicos en {columnName}:")
-        distribucion = df[columnName].value_counts()
-        for valor, count in distribucion.items():
-            porcentaje = (count / len(df)) * 100
-            print(f"  {valor:25}: {count:>5} ({porcentaje:.1f}%)")
-    else:
-        print(f"❌ Columna '{columnName}' no encontrada")

@@ -2,40 +2,33 @@
 MENÚ PRINCIPAL - Integra gestión y análisis
 """
 
-from dataSetManage import loadData, showDatasetInfo, searchByColumn, searchByCustomerId, showChurnStats, showUniqueValues
+from dataSetManage import loadData, showDatasetInfo, showColumnSamples, showChurnStats
 
 def dataManageMenu(df):
-    """Menú de Gestión de Datos"""
+    """Menú de Gestión de Datos - Versión Simplificada"""
     while True:
         print("\n" + "="*60)
-        print("📊 MENÚ GESTIÓN DE DATOS")
+        print("📊 MENÚ GESTIÓN DE DATOS - SIMPLIFICADO")
         print("="*60)
         print("1. 📋 Información general del dataset")
-        print("2. 🔍 Buscar por columna específica")
-        print("3. 👤 Buscar por CustomerID")
-        print("4. 📈 Estadísticas de Churn")
-        print("5. 🔎 Ver valores únicos de una columna")
-        print("6. ↩️ Volver al menú principal")
+        print("2. 🔍 Mostrar muestras de columna")
+        print("3. 📈 Estadísticas de Churn")
+        print("4. ↩️ Volver al menú principal")
         print("="*60)
         
-        opcion = input("Selecciona una opción (1-6): ").strip()
+        opcion = input("Selecciona una opción (1-4): ").strip()
         
         if opcion == '1':
             showDatasetInfo(df)
         elif opcion == '2':
-            searchByColumn(df)
+            showColumnSamples(df)
         elif opcion == '3':
-            searchByCustomerId(df)
-        elif opcion == '4':
             showChurnStats(df)
-        elif opcion == '5':
-            columna = input("Ingresa el nombre de la columna: ").strip()
-            showUniqueValues(df, columna)
-        elif opcion == '6':
+        elif opcion == '4':
             print("Volviendo al menú principal...")
             break
         else:
-            print("❌ Opción inválida. Por favor elige 1-6.")
+            print("❌ Opción inválida. Por favor elige 1-4.")
         
         input("\nPresiona Enter para continuar...")
 

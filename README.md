@@ -1,4 +1,5 @@
 SPANISH----Este es un proyecto de prueba hecho por Oscar Reina Ingeniero en sistemas con gran interes en especializar en Analisis de datos y Ciencia de Datos. ----
+
 1- El primer obejtivo del proyecto es experimentar con  analisis de datos a traves de python con creacion de graficos y dashboards, luego compararlo con el analisis en PowerBi.
 2- El segundo objetivo del proyecto es tomar los datos del analisis anterior y hacer analisis predictivos , asi implementando modelos de machine learning 
 
